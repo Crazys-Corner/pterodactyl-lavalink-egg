@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-03-30T07:44:42+00:00",
+    "name": "LavaLink",
+    "author": "cam@civilhost.net",
+    "description": "Egg for LavaLink so you can install it and run it on a server.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:java_17": "ghcr.io\/pterodactyl\/yolks:java_17"
+    },
+    "file_denylist": [],
+    "startup": "java -jar Lavalink.jar",
+    "config": {
+        "files": "{\r\n    \"application.yml\": {\r\n        \"parser\": \"yml\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Lavalink is ready to accept connections.\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!bin\/bash\r\n# LavaLink Installation Script\r\necho \"Beginning Installation, updating packages & installing temporary dependencies\"\r\napt update\r\napt install -y curl jq \r\ncd \/mnt\/server\r\necho \"Downloading LavaLink files\"\r\nlatest_release=$(curl -s https:\/\/api.github.com\/repos\/lavalink-devs\/Lavalink\/releases\/latest)\r\ndownload_url=$(echo \"$latest_release\" | grep -o '\"browser_download_url\": \"[^\"]*' | sed 's\/\"browser_download_url\": \"\/\/')\r\ncurl -L -o Lavalink.jar \"$download_url\"\r\necho \"Done.\"\r\necho \"Getting Config File\"\r\ncurl -L https:\/\/raw.githubusercontent.com\/lavalink-devs\/Lavalink\/master\/LavalinkServer\/application.yml.example -o application.yml\r\necho \"Install Complete\"",
+            "container": "ghcr.io\/parkervcp\/yolks:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": []
+}
